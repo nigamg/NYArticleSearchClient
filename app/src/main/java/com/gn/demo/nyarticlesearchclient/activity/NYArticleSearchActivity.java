@@ -113,8 +113,6 @@ public class NYArticleSearchActivity extends AppCompatActivity {
             public boolean onQueryTextSubmit(String query) {
                 // perform query here
                 // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
-                // see https://code.google.com/p/android/issues/detail?id=24599
-                //fetchBooks(query);
 
 
                 if(query != null){
