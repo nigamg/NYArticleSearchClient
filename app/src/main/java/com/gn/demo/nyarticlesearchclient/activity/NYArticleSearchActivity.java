@@ -1,5 +1,6 @@
 package com.gn.demo.nyarticlesearchclient.activity;
 
+import android.app.DatePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
@@ -10,14 +11,19 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.InputType;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import com.gn.demo.nyarticlesearchclient.R;
 import com.gn.demo.nyarticlesearchclient.adapter.GridAdapter;
 import com.gn.demo.nyarticlesearchclient.model.NYArticle;
+import com.gn.demo.nyarticlesearchclient.view.DatePickerFragment;
 import com.gn.demo.nyarticlesearchclient.view.EndlessRecyclerViewScrollListener;
 import com.gn.demo.nyarticlesearchclient.view.GridSpaceDecorator;
 import com.loopj.android.http.AsyncHttpClient;
@@ -28,11 +34,14 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
 
 import cz.msebera.android.httpclient.Header;
 
-public class NYArticleSearchActivity extends AppCompatActivity implements FilterFragment.OnFragmentInteractionListener {
+public class NYArticleSearchActivity extends AppCompatActivity implements SearchFilterFragment.OnFragmentInteractionListener{
 
     RecyclerView gridRecyclerView;
     GridAdapter adapter;
@@ -72,8 +81,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Filter
                 customLoadMoreDataFromApi(page);
             }
         });
-
     }
+
     // Append more data into the adapter
     // This method probably sends out a network request and appends new data items to your adapter.
     public void customLoadMoreDataFromApi(int offset) {
@@ -189,16 +198,15 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Filter
      * @param item
      */
     public void showSearchFilter(MenuItem item) {
-
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+        SearchFilterFragment searchFilterFragment = SearchFilterFragment.newInstance("Filter Your Search");
+        searchFilterFragment.show(fm, "fragment_search_filter");
 
-        FilterFragment editTodoItemDialogFragmentDialog = FilterFragment.newInstance("Filter Search");
-
-        editTodoItemDialogFragmentDialog.show(fm, "fragment_filter");
     }
 
     @Override
     public void onFragmentInteraction(Uri uri) {
 
     }
+
 }

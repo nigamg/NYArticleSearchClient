@@ -1,28 +1,38 @@
 package com.gn.demo.nyarticlesearchclient.activity;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.DatePicker;
+import android.widget.EditText;
 
 import com.gn.demo.nyarticlesearchclient.R;
+import com.gn.demo.nyarticlesearchclient.view.DatePickerFragment;
+
+import java.util.Calendar;
+
 
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link FilterFragment.OnFragmentInteractionListener} interface
+ * {@link SearchFilterFragment.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link FilterFragment#newInstance} factory method to
+ * Use the {@link SearchFilterFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class FilterFragment extends DialogFragment {
+public class SearchFilterFragment extends DialogFragment {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
+    private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -30,7 +40,7 @@ public class FilterFragment extends DialogFragment {
 
     private OnFragmentInteractionListener mListener;
 
-    public FilterFragment() {
+    public SearchFilterFragment() {
         // Required empty public constructor
     }
 
@@ -39,14 +49,13 @@ public class FilterFragment extends DialogFragment {
      * this fragment using the provided parameters.
      *
      * @param param1 Parameter 1.
-     * @return A new instance of fragment FilterFragment.
+     * @return A new instance of fragment SearchFilterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static FilterFragment newInstance(String param1) {
-        FilterFragment fragment = new FilterFragment();
+    public static SearchFilterFragment newInstance(String param1) {
+        SearchFilterFragment fragment = new SearchFilterFragment();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
-
         fragment.setArguments(args);
         return fragment;
     }
@@ -56,6 +65,7 @@ public class FilterFragment extends DialogFragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
+            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -63,8 +73,19 @@ public class FilterFragment extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_filter, container, false);
+        final View v = inflater.inflate(R.layout.fragment_search_filter, container, false);
+
+        EditText beginDate = (EditText) v.findViewById(R.id.beginDate);
+
+        beginDate.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View vv) {
+                DatePickerFragment newFragment = new DatePickerFragment();
+                newFragment.show(getChildFragmentManager(), "datePicker");
+            }
+        });
+        return v;
     }
+
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
