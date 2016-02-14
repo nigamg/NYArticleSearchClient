@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -80,7 +80,9 @@ public class GridAdapter extends RecyclerView.Adapter<GridAdapter.GridView> {
         return this.articles.size();
     }
 
-
+    /**
+     * ViewHolder for grid view
+     */
     public static class GridView extends RecyclerView.ViewHolder {
         CardView cv;
         public ImageView imageView;

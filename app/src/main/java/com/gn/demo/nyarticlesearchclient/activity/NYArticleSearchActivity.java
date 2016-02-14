@@ -1,5 +1,8 @@
 package com.gn.demo.nyarticlesearchclient.activity;
 
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,7 +32,7 @@ import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.Header;
 
-public class NYArticleSearchActivity extends AppCompatActivity {
+public class NYArticleSearchActivity extends AppCompatActivity implements FilterFragment.OnFragmentInteractionListener {
 
     RecyclerView gridRecyclerView;
     GridAdapter adapter;
@@ -91,12 +94,22 @@ public class NYArticleSearchActivity extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.ny_article_search) {
-            return true;
-        }
+        switch (item.getItemId()) {
+            case R.id.ny_article_search:
+                // User chose the "search" item..
+                return true;
 
-        return super.onOptionsItemSelected(item);
+            case R.id.ny_search_filter:
+                // User chose the "filter" action..
+                // as a favorite...
+                return true;
+
+            default:
+                // If we got here, the user's action was not recognized.
+                // Invoke the superclass to handle it.
+                return super.onOptionsItemSelected(item);
+
+        }
     }
 
 
@@ -105,6 +118,7 @@ public class NYArticleSearchActivity extends AppCompatActivity {
 
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.grid_menu_search, menu);
+
         MenuItem searchItem = menu.findItem(R.id.ny_article_search);
 
         final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
@@ -166,8 +180,25 @@ public class NYArticleSearchActivity extends AppCompatActivity {
             }
 
         });
-
         return super.onCreateOptionsMenu(menu);
+
+    }
+
+    /**
+     * Item click event for search filter
+     * @param item
+     */
+    public void showSearchFilter(MenuItem item) {
+
+        android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
+
+        FilterFragment editTodoItemDialogFragmentDialog = FilterFragment.newInstance("Filter Search");
+
+        editTodoItemDialogFragmentDialog.show(fm, "fragment_filter");
+    }
+
+    @Override
+    public void onFragmentInteraction(Uri uri) {
 
     }
 }

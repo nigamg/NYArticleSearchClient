@@ -3,6 +3,13 @@
 xmlns:app="http://schemas.android.com/apk/res-auto"
 xmlns:tools="http://schemas.android.com/tools"
 tools:context=".activity.NYArticleSearchActivity">
+    <item android:id="@+id/ny_search_filter"
+        android:orderInCategory="5"
+        android:title="Search Filter"
+        android:icon="@mipmap/ic_launcher"
+        app:showAsAction="ifRoom|collapseActionView"
+        android:onClick="showSearchFilter"
+        android:actionViewClass="android.widget.ImageView"/>
 <item android:id="@+id/ny_article_search"
     android:orderInCategory="5"
     android:title="Search"
