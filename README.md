@@ -11,9 +11,9 @@ Completed user stories:
         Begin Date (using a date picker)
         News desk values (Arts, Fashion & Style, Sports)
         Sort order (oldest or newest)
-    Rquired:  Subsequent searches will have any filters applied to the search results. (1 point) - Working*
+    Rquired:  Subsequent searches will have any filters applied to the search results. (1 point) - Working->Done*
     Rquired:  User can tap on any article in results to view the contents in an embedded browser. (2 points)
-    Rquired:  User can scroll down "infinitely" to continue loading more news articles. The maximum number of articles is limited by the API search. (1 point)
+    Rquired:  User can scroll down "infinitely" to continue loading more news articles. The maximum number of articles is limited by the API search. (1 point) Working*
 
     Optional: Advanced: Robust error handling, check if internet is available, handle error cases, network failures. (1 point)
     Optional: Advanced: Use the ActionBar SearchView or custom layout as the query box instead of an EditText. (1 point)
@@ -22,4 +22,4 @@ Completed user stories:
     Optional:  Bonus: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
 
 
-![alt tag](https://github.com/nigamg/NYArticleSearchClient/blob/master/app/src/main/res/nysearch_client_V1.gif)
+![alt tag](https://github.com/nigamg/NYArticleSearchClient/blob/master/assets/nysearch_client_V2.gif)
