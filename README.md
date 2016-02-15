@@ -22,4 +22,4 @@ Completed user stories:
     Optional:  Bonus: Use the RecyclerView with the StaggeredGridLayoutManager to display improve the grid of image results (see Picasso guide too). (2 points)
 
 
-
+![alt tag](http://url/to/img.png)
