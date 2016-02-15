@@ -13,11 +13,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.gn.demo.nyarticlesearchclient.R;
+import com.gn.demo.nyarticlesearchclient.model.SearchFilter;
 import com.gn.demo.nyarticlesearchclient.view.DatePickerFragment;
 
 import java.util.Calendar;
@@ -37,6 +39,8 @@ public class SearchFilterFragment extends DialogFragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
+    private static SearchFilter sF;
+
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
@@ -55,8 +59,10 @@ public class SearchFilterFragment extends DialogFragment {
      * @return A new instance of fragment SearchFilterFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static SearchFilterFragment newInstance(String param1) {
+    public static SearchFilterFragment newInstance(String param1, SearchFilter searchFilter) {
         SearchFilterFragment fragment = new SearchFilterFragment();
+
+        sF = searchFilter;
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
         fragment.setArguments(args);
@@ -78,8 +84,11 @@ public class SearchFilterFragment extends DialogFragment {
         // Inflate the layout for this fragment
         final View v = inflater.inflate(R.layout.fragment_search_filter, container, false);
 
-        EditText beginDate = (EditText) v.findViewById(R.id.beginDate);
+        final EditText beginDate = (EditText) v.findViewById(R.id.beginDate);
         Button saveFilter = (Button) v.findViewById(R.id.filterBtn);
+
+
+        getDialog().setTitle("Refine Your Search");
 
         beginDate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vv) {
@@ -91,6 +100,47 @@ public class SearchFilterFragment extends DialogFragment {
         saveFilter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vv) {
                 Log.i("DEBUG", " saving");
+
+                EditText sort = (EditText) v.findViewById(R.id.sortOrder);
+
+                CheckBox artsCk = (CheckBox) v.findViewById(R.id.artsCk);
+                CheckBox sportCk = (CheckBox) v.findViewById(R.id.sportsCk);
+                CheckBox fashionCk = (CheckBox) v.findViewById(R.id.fashionCk);
+
+                if(beginDate.getText().toString() != "Select Date"){
+                    String date = beginDate.getText().toString();
+                    Log.i("DEBUG", "++++++before split, date++++++"+date);
+                    if(date.indexOf('.') != -1){
+                        String [] dateArr = date.split("\\.");
+
+                        String d = "";
+                        for(int i = dateArr.length-1 ; i>= 0 ;i--){
+                            Log.i("DEBUG", "----"+dateArr[i]);
+                            d = d + dateArr[i];
+                        }
+                        Log.i("DEBUG", "++++++date++++++"+d);
+                        sF.setBeginDate(d);
+                    }
+                }
+
+                if(sort.getText().toString() != "Oldest"){
+                    sF.setSortOrder("oldest");
+                   // Log.i("DEBUG", "++++++++++++"+sort.getText().toString());
+                }
+
+                if(artsCk.isChecked()){
+                    sF.setDeskValues(artsCk.getText().toString());
+                }
+
+
+                if(sportCk.isChecked()){
+                    sF.setDeskValues(sF.getDeskValues()+"," + sportCk.getText().toString());
+                }
+
+                if(fashionCk.isChecked()){
+                    sF.setDeskValues(sF.getDeskValues()+"," + fashionCk.getText().toString());
+                }
+
                 Toast.makeText(getActivity(), "Search Preference Saved!", Toast.LENGTH_SHORT).show();
 
                 getDialog().dismiss();
@@ -100,13 +150,6 @@ public class SearchFilterFragment extends DialogFragment {
         return v;
     }
 
-
-    // TODO: Rename method, update argument and hook method into UI event
-    public void onButtonPressed(Uri uri) {
-        if (mListener != null) {
-            mListener.onFragmentInteraction(uri);
-        }
-    }
 
     @Override
     public void onAttach(Context context) {

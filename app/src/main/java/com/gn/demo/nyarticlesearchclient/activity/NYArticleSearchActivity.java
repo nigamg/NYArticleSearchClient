@@ -1,8 +1,5 @@
 package com.gn.demo.nyarticlesearchclient.activity;
 
-import android.app.DatePickerDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v7.app.AppCompatActivity;
@@ -42,13 +39,14 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
 
     RecyclerView gridRecyclerView;
     GridAdapter adapter;
-    ArrayList<NYArticle> articles = new ArrayList<>();
+    ArrayList<NYArticle> articles;
 
-    static SearchFilter sF = new SearchFilter();
+    SearchFilter sF = new SearchFilter();
 
     private static final String apiRootUrl = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
     private AsyncHttpClient client;
     RequestParams requestParams;
+    StringBuilder fqValue;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +56,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         gridRecyclerView = (RecyclerView) findViewById(R.id.gridItems);
         StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
+
+        articles = new ArrayList<>();
 
         adapter = new GridAdapter(this, articles);
         gridRecyclerView.setAdapter(adapter);
@@ -129,6 +129,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
 
         MenuItem searchItem = menu.findItem(R.id.ny_article_search);
         if(searchItem != null){
+
             final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
@@ -138,6 +139,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
 
 
                     if(query != null){
+                        articles = new ArrayList<>();
+
                         client = new AsyncHttpClient();
                         requestParams = new RequestParams();
 
@@ -145,44 +148,46 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                         requestParams.put("page", 0);
 
                         requestParams.put("q", query);
-
                         if(sF.getAtleastOneValueIsSet()){
-                            StringBuilder fqValue = new StringBuilder();
-                            if(sF.getBeginDate() != null){
-                                fqValue.append("fq=begin_date:('");
-                                fqValue.append(sF.getBeginDate());
-                                fqValue.append("')");
+                            fqValue = new StringBuilder();
+                            try{
+                                if(sF.getAtleastOneValueIsSet()){
+                                    if(sF.getBeginDate() != null){
+                                        fqValue.append("begin_date:('");
+                                        fqValue.append(sF.getBeginDate());
+                                        fqValue.append("')");
+                                    }
+
+                                    if(sF.getDeskValues() != null){
+                                        if(fqValue.toString() != null && fqValue.length() != 0){
+                                            fqValue.append(" AND news_desk:('");
+                                            fqValue.append(sF.getDeskValues());
+                                            fqValue.append("')");
+                                        }else{
+                                            fqValue.append("news_desk:('");
+                                            fqValue.append(sF.getDeskValues());
+                                            fqValue.append("')");
+                                        }
+                                    }
+
+                                    if(sF.getSortOrder() != null){
+                                        if(fqValue.toString() != null && fqValue.length() != 0){
+                                            fqValue.append(" AND sort:('");
+                                            fqValue.append(sF.getSortOrder());
+                                            fqValue.append("')");
+                                        }else{
+                                            fqValue.append("sort:('");
+                                            fqValue.append(sF.getSortOrder());
+                                            fqValue.append("')");
+                                        }
+                                    }
+                                }
+                            }catch (Exception e){
+                                e.printStackTrace();
                             }
-
-                            if(sF.getDeskValues() != null){
-                                if(fqValue.toString() != null || fqValue.length() != 0){
-                                    fqValue.append("AND news_desk:('");
-                                    fqValue.append(sF.getDeskValues());
-                                }
-                            }else{
-                                if(sF.getDeskValues() != null){
-                                    fqValue.append("fq=news_desk:('");
-                                    fqValue.append(sF.getDeskValues());
-                                    fqValue.append("')");
-                                }
-                            }
-
-                            if(sF.getSortOrder() != null){
-                                if(fqValue.toString() != null || fqValue.length() != 0){
-                                    fqValue.append("AND sort:('");
-                                    fqValue.append(sF.getSortOrder());
-                                    fqValue.append("')");
-                                }
-                            }else{
-                                if(sF.getDeskValues() != null){
-                                    fqValue.append("AND sort:('");
-                                    fqValue.append(sF.getSortOrder());
-                                    fqValue.append("')");
-                                }
-                            }
-
-
+                            requestParams.put("fq", fqValue.toString());
                         }
+                        Log.i("DEBUG" ,"++++++++++++++++"+requestParams.toString());
                         try{
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override
@@ -237,7 +242,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
      */
     public void showSearchFilter(MenuItem item) {
         android.support.v4.app.FragmentManager fm = getSupportFragmentManager();
-        SearchFilterFragment searchFilterFragment = SearchFilterFragment.newInstance("Filter Your Search");
+        SearchFilterFragment searchFilterFragment = SearchFilterFragment.newInstance("Filter Your Search", sF);
         searchFilterFragment.show(fm, "fragment_search_filter");
 
     }

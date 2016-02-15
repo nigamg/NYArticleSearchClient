@@ -1,7 +1,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="350dp"
+    android:layout_height="300dp"
     tools:context=".activity.SearchFilterFragment"
     android:minHeight="350dp"
     android:minWidth="480dp"
@@ -57,7 +57,7 @@
                 android:layout_weight="3"
                 android:hint="text2"
                 android:layout_height="wrap_content"
-                android:id="@+id/telefonoTxt"
+                android:id="@+id/sortOrder"
                 android:imeOptions="flagNoExtractUi"
                 android:inputType="phone"
                 android:text="Oldest" />
@@ -71,8 +71,8 @@
         android:layout_gravity="right"
         android:text="Save"
         android:id="@+id/filterBtn"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true" />
+        android:layout_below="@+id/tableRow2"
+        android:layout_centerHorizontal="true" />
 
     <TableRow
         android:layout_width="fill_parent"
@@ -97,8 +97,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Arts"
-            android:id="@+id/checkBox1"
-            android:layout_weight="2.01" />
+            android:id="@+id/artsCk"
+            android:layout_weight="2.01"
+            android:checked="false" />
     </TableRow>
     <TableRow
         android:layout_width="fill_parent"
@@ -117,9 +118,10 @@
         <CheckBox
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="Fashion and Style"
-            android:id="@+id/checkBox2"
-            android:layout_weight="2" />
+            android:text="Fashion &amp; Style"
+            android:id="@+id/fashionCk"
+            android:layout_weight="2"
+            android:checked="false" />
     </TableRow>
     <TableRow
         android:layout_width="fill_parent"
@@ -140,8 +142,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:text="Sports"
-            android:id="@+id/checkBox3"
-            android:layout_weight="2.20" />
+            android:id="@+id/sportsCk"
+            android:layout_weight="2.20"
+            android:checked="false" />
 
     </TableRow>
 

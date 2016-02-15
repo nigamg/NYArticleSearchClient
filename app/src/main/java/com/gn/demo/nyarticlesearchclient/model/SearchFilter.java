@@ -5,10 +5,10 @@ package com.gn.demo.nyarticlesearchclient.model;
  */
 public class SearchFilter {
 
-    String beginDate;
-    String sortOrder;
-    String deskValues;
-    boolean atleastOneValueIsSet=false;
+    private String beginDate;
+    private String sortOrder;
+    private String deskValues;
+    private boolean atleastOneValueIsSet=false;
 
     public boolean getAtleastOneValueIsSet() {
         return atleastOneValueIsSet;
@@ -16,7 +16,6 @@ public class SearchFilter {
 
     public void setAtleastOneValueIsSet(boolean atleastOneValueIsSet) {
         this.atleastOneValueIsSet = atleastOneValueIsSet;
-        this.setAtleastOneValueIsSet(true);
     }
 
     public String getBeginDate() {
