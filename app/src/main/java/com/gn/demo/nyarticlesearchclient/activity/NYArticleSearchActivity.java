@@ -48,6 +48,11 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
     RequestParams requestParams;
     StringBuilder fqValue;
 
+    /***
+     * Cached query for subsequent requests
+     */
+    private String cachedQuery = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,6 +67,16 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         adapter = new GridAdapter(this, articles);
         gridRecyclerView.setAdapter(adapter);
 
+        gridRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                Log.i("DEBUG" ,"==================loading more items =================");
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                customLoadMoreDataFromApi(page);
+            }
+        });
+
         GridSpaceDecorator decorator = new GridSpaceDecorator(4);
         gridRecyclerView.addItemDecoration(decorator);
 
@@ -70,16 +85,6 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         itemAnimator.setAddDuration(1000);
         itemAnimator.setRemoveDuration(1000);
         gridRecyclerView.setItemAnimator(itemAnimator);
-
-        // Add the scroll listener
-        gridRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-                customLoadMoreDataFromApi(page);
-            }
-        });
     }
 
     // Append more data into the adapter
@@ -93,6 +98,95 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         // curSize will equal to the index of the first element inserted because the list is 0-indexed
        // int curSize = adapter.getItemCount();
         //adapter.notifyItemRangeInserted(curSize, items.size() - 1);
+
+
+        int currSize = adapter.getItemCount();
+        fetchMoreData(offset, currSize);
+    }
+
+
+    /***
+     * fetches more data, on top of already built client and view
+     * @param page
+     */
+    public void fetchMoreData(int page, final int curSize){
+
+        if(client != null && requestParams != null){
+            requestParams.put("page", page);
+
+            requestParams.put("q", cachedQuery);
+            if(sF.getAtleastOneValueIsSet()){
+                fqValue = new StringBuilder();
+                try{
+                    if(sF.getAtleastOneValueIsSet()){
+                        if(sF.getBeginDate() != null){
+                            fqValue.append("begin_date:('");
+                            fqValue.append(sF.getBeginDate());
+                            fqValue.append("')");
+                        }
+
+                        if(sF.getDeskValues() != null){
+                            if(fqValue.toString() != null && fqValue.length() != 0){
+                                fqValue.append(" AND news_desk:('");
+                                fqValue.append(sF.getDeskValues());
+                                fqValue.append("')");
+                            }else{
+                                fqValue.append("news_desk:('");
+                                fqValue.append(sF.getDeskValues());
+                                fqValue.append("')");
+                            }
+                        }
+
+                        if(sF.getSortOrder() != null){
+                            if(fqValue.toString() != null && fqValue.length() != 0){
+                                fqValue.append(" AND sort:('");
+                                fqValue.append(sF.getSortOrder());
+                                fqValue.append("')");
+                            }else{
+                                fqValue.append("sort:('");
+                                fqValue.append(sF.getSortOrder());
+                                fqValue.append("')");
+                            }
+                        }
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+                requestParams.put("fq", fqValue.toString());
+            }
+            Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
+            try{
+                client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
+                    @Override
+                    public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                        //super.onSuccess(statusCode, headers, response);
+
+                        try {
+                            JSONArray articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
+                            Log.d("DEBUG", articleJsonResults.toString());
+                            articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
+
+                            gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+
+                            adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                            gridRecyclerView.setAdapter(adapter);
+
+                            adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
+
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                        super.onFailure(statusCode, headers, responseString, throwable);
+                    }
+                });
+            }catch (Exception e){
+
+            }
+        }
     }
 
     @Override
@@ -137,6 +231,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                     // perform query here
                     // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
 
+                    cachedQuery = query;
 
                     if(query != null){
                         articles = new ArrayList<>();
@@ -187,7 +282,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             }
                             requestParams.put("fq", fqValue.toString());
                         }
-                        Log.i("DEBUG" ,"++++++++++++++++"+requestParams.toString());
+                        Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
                         try{
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override
