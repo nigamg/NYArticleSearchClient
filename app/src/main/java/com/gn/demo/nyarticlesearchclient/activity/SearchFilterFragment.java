@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -89,7 +90,8 @@ public class SearchFilterFragment extends DialogFragment {
 
         saveFilter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vv) {
-                Toast.makeText(getContext(), "Search Preference Saved!", Toast.LENGTH_SHORT);
+                Log.i("DEBUG", " saving");
+                Toast.makeText(getActivity(), "Search Preference Saved!", Toast.LENGTH_SHORT);
             }
         });
 
