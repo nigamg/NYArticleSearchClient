@@ -129,66 +129,67 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         inflater.inflate(R.menu.grid_menu_search, menu);
 
         MenuItem searchItem = menu.findItem(R.id.ny_article_search);
+        if(searchItem != null){
+            final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    // perform query here
+                    // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
 
-        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-            @Override
-            public boolean onQueryTextSubmit(String query) {
-                // perform query here
-                // workaround to avoid issues with some emulators and keyboard devices firing twice if a keyboard enter is used
 
+                    if(query != null){
+                        client = new AsyncHttpClient();
+                        requestParams = new RequestParams();
 
-                if(query != null){
-                    client = new AsyncHttpClient();
-                    requestParams = new RequestParams();
+                        requestParams.put("api-key", "56d5422c914f8280507735460fcf757e:1:74388174");
+                        requestParams.put("page", 0);
 
-                    requestParams.put("api-key", "56d5422c914f8280507735460fcf757e:1:74388174");
-                    requestParams.put("page", 0);
+                        requestParams.put("q", query);
+                        try{
+                            client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
+                                @Override
+                                public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
+                                    //super.onSuccess(statusCode, headers, response);
 
-                    requestParams.put("q", query);
-                    try{
-                        client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
-                            @Override
-                            public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
-                                //super.onSuccess(statusCode, headers, response);
+                                    try {
+                                        JSONArray articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
+                                        Log.d("DEBUG", articleJsonResults.toString());
+                                        articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
 
-                                try {
-                                    JSONArray articleJsonResults = response.getJSONObject("response").getJSONArray("docs");
-                                    Log.d("DEBUG", articleJsonResults.toString());
-                                    articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
+                                        gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
 
-                                    gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+                                        adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                                        gridRecyclerView.setAdapter(adapter);
 
-                                    adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
-                                    gridRecyclerView.setAdapter(adapter);
+                                        adapter.notifyDataSetChanged();
 
-                                    adapter.notifyDataSetChanged();
-
-                                } catch (JSONException e) {
-                                    e.printStackTrace();
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
                                 }
-                            }
 
-                            @Override
-                            public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
-                                super.onFailure(statusCode, headers, responseString, throwable);
-                            }
-                        });
-                    }catch (Exception e){
+                                @Override
+                                public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                                    super.onFailure(statusCode, headers, responseString, throwable);
+                                }
+                            });
+                        }catch (Exception e){
 
+                        }
                     }
+                    searchView.clearFocus();
+                    //Toast.makeText(getApplicationContext(), "Searching for " +query, Toast.LENGTH_SHORT).show();
+                    return true;
                 }
-                searchView.clearFocus();
-                //Toast.makeText(getApplicationContext(), "Searching for " +query, Toast.LENGTH_SHORT).show();
-                return true;
-            }
 
-            @Override
-            public boolean onQueryTextChange(String newText) {
-                return false;
-            }
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    return false;
+                }
 
-        });
+            });
+        }
         return super.onCreateOptionsMenu(menu);
 
     }

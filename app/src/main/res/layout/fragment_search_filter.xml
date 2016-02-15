@@ -2,109 +2,149 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activity.SearchFilterFragment">
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".activity.SearchFilterFragment"
+    android:minHeight="480dp"
+    android:minWidth="480dp">
 
-    <!-- TODO: Update blank fragment layout -->
-
-    <EditText
-        android:layout_width="225dp"
+    <TableLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/beginDate"
-        android:text="begin date"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="50dp"
-        android:layout_alignLeft="@+id/editText"
-        android:layout_alignStart="@+id/editText"
-        android:layout_alignRight="@+id/editText"
-        android:layout_alignEnd="@+id/editText" />
+        android:id="@+id/tableLayout">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Begin Date"
-        android:id="@+id/textView"
-        android:layout_marginLeft="32dp"
-        android:layout_marginStart="32dp"
-        android:layout_alignBottom="@+id/beginDate"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="20sp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="News Desk values"
-        android:id="@+id/textView2"
-        android:layout_alignLeft="@+id/textView"
-        android:layout_alignStart="@+id/textView"
-        android:layout_marginBottom="37dp"
-        android:layout_centerVertical="true" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Begin Date"/>
 
-    <EditText
-        android:layout_width="225dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/editText"
-        android:text="Oldest"
-        android:layout_below="@+id/beginDate"
-        android:layout_marginTop="49dp"
-        android:layout_alignLeft="@+id/artsCheckbox"
-        android:layout_alignStart="@+id/artsCheckbox"
-        android:layout_alignRight="@+id/fSCheckbox"
-        android:layout_alignEnd="@+id/fSCheckbox" />
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:hint="text1"
+                android:layout_height="wrap_content"
+                android:id="@+id/beginDate"
+                android:imeOptions="flagNoExtractUi" />
+        </TableRow>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Arts"
-        android:id="@+id/artsCheckbox"
-        android:checked="false"
-        android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/textView2"
-        android:layout_toEndOf="@+id/textView2"
-        android:layout_marginLeft="33dp"
-        android:layout_marginStart="33dp" />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text=" Fashion &amp; Style"
-        android:id="@+id/fSCheckbox"
-        android:layout_below="@+id/artsCheckbox"
-        android:layout_alignLeft="@+id/artsCheckbox"
-        android:layout_alignStart="@+id/artsCheckbox"
-        android:checked="false" />
+        </TableRow>
 
-    <CheckBox
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Sports"
-        android:id="@+id/sportCheckbox"
-        android:layout_below="@+id/fSCheckbox"
-        android:layout_alignLeft="@+id/fSCheckbox"
-        android:layout_alignStart="@+id/fSCheckbox"
-        android:checked="false" />
+        <TableRow
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="20sp">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Sort Order"
-        android:id="@+id/sortOrder"
-        android:layout_alignBottom="@+id/editText"
-        android:layout_alignLeft="@+id/textView2"
-        android:layout_alignStart="@+id/textView2" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_weight="2"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="Sort Order"/>
+
+            <EditText
+                android:layout_width="0dp"
+                android:layout_weight="3"
+                android:hint="text2"
+                android:layout_height="wrap_content"
+                android:id="@+id/telefonoTxt"
+                android:imeOptions="flagNoExtractUi"
+                android:inputType="phone"/>
+        </TableRow>
+
+    </TableLayout>
 
     <Button
-        style="?android:attr/buttonStyleSmall"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="right"
         android:text="Save"
-        android:id="@+id/saveFilter"
-        android:layout_below="@+id/sportCheckbox"
-        android:layout_toRightOf="@+id/sortOrder"
-        android:layout_marginTop="42dp"
-        android:layout_alignRight="@+id/artsCheckbox"
-        android:layout_alignEnd="@+id/artsCheckbox" />
+        android:id="@+id/guardarBtn"
+        android:layout_below="@+id/tableLayout"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="161dp" />
+
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tableLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="20sp"
+        android:layout_marginRight="20sp"
+        android:layout_marginTop="20sp"
+        android:id="@+id/tableRow1">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="News Desk Values"
+            android:maxLines="2" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Arts"
+            android:id="@+id/checkBox1"
+            android:layout_weight="2" />
+    </TableRow>
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableRow2"
+        android:layout_below="@+id/tableRow3"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="2"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:maxLines="2" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Fashion and Style"
+            android:id="@+id/checkBox2"
+            android:layout_weight="2" />
+    </TableRow>
+    <TableRow
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/tableRow3"
+        android:layout_below="@+id/tableRow1"
+        android:layout_alignLeft="@+id/tableRow1"
+        android:layout_alignStart="@+id/tableRow1">
+    <TextView
+        android:layout_width="0dp"
+        android:layout_weight="2"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text=" "
+        android:maxLines="2" />
+
+        <CheckBox
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="Sports"
+            android:id="@+id/checkBox3"
+            android:layout_weight="2.19" />
+
+    </TableRow>
 
 </RelativeLayout>
