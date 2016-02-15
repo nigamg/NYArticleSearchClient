@@ -67,6 +67,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         adapter = new GridAdapter(this, articles);
         gridRecyclerView.setAdapter(adapter);
 
+
         gridRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
             public void onLoadMore(int page, int totalItemsCount) {
@@ -82,8 +83,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
 
 
         RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-        itemAnimator.setAddDuration(1000);
-        itemAnimator.setRemoveDuration(1000);
+        itemAnimator.setAddDuration(500);
+        itemAnimator.setRemoveDuration(500);
         gridRecyclerView.setItemAnimator(itemAnimator);
     }
 

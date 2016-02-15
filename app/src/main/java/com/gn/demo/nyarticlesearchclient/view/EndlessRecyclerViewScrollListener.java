@@ -4,6 +4,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 
 /**
  * Created by workboard on 2/13/16.
@@ -35,6 +36,7 @@ public abstract class EndlessRecyclerViewScrollListener extends RecyclerView.OnS
     public EndlessRecyclerViewScrollListener(StaggeredGridLayoutManager layoutManager) {
         this.mLayoutManager = layoutManager;
         visibleThreshold = visibleThreshold * layoutManager.getSpanCount();
+        Log.i("DEBUG", "+++++++++ inside endless scroll ++++++++ ");
     }
 
     public int getLastVisibleItem(int[] lastVisibleItemPositions) {
