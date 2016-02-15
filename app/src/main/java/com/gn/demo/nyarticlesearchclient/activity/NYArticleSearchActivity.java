@@ -11,19 +11,18 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.InputType;
+
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.DatePicker;
-import android.widget.EditText;
+
 
 import com.gn.demo.nyarticlesearchclient.R;
 import com.gn.demo.nyarticlesearchclient.adapter.GridAdapter;
 import com.gn.demo.nyarticlesearchclient.model.NYArticle;
-import com.gn.demo.nyarticlesearchclient.view.DatePickerFragment;
+import com.gn.demo.nyarticlesearchclient.model.SearchFilter;
+
 import com.gn.demo.nyarticlesearchclient.view.EndlessRecyclerViewScrollListener;
 import com.gn.demo.nyarticlesearchclient.view.GridSpaceDecorator;
 import com.loopj.android.http.AsyncHttpClient;
@@ -34,10 +33,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Locale;
+
 
 import cz.msebera.android.httpclient.Header;
 
@@ -46,6 +43,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
     RecyclerView gridRecyclerView;
     GridAdapter adapter;
     ArrayList<NYArticle> articles = new ArrayList<>();
+
+    static SearchFilter sF = new SearchFilter();
 
     private static final String apiRootUrl = "http://api.nytimes.com/svc/search/v2/articlesearch.json";
     private AsyncHttpClient client;
@@ -146,6 +145,44 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                         requestParams.put("page", 0);
 
                         requestParams.put("q", query);
+
+                        if(sF.getAtleastOneValueIsSet()){
+                            StringBuilder fqValue = new StringBuilder();
+                            if(sF.getBeginDate() != null){
+                                fqValue.append("fq=begin_date:('");
+                                fqValue.append(sF.getBeginDate());
+                                fqValue.append("')");
+                            }
+
+                            if(sF.getDeskValues() != null){
+                                if(fqValue.toString() != null || fqValue.length() != 0){
+                                    fqValue.append("AND news_desk:('");
+                                    fqValue.append(sF.getDeskValues());
+                                }
+                            }else{
+                                if(sF.getDeskValues() != null){
+                                    fqValue.append("fq=news_desk:('");
+                                    fqValue.append(sF.getDeskValues());
+                                    fqValue.append("')");
+                                }
+                            }
+
+                            if(sF.getSortOrder() != null){
+                                if(fqValue.toString() != null || fqValue.length() != 0){
+                                    fqValue.append("AND sort:('");
+                                    fqValue.append(sF.getSortOrder());
+                                    fqValue.append("')");
+                                }
+                            }else{
+                                if(sF.getDeskValues() != null){
+                                    fqValue.append("AND sort:('");
+                                    fqValue.append(sF.getSortOrder());
+                                    fqValue.append("')");
+                                }
+                            }
+
+
+                        }
                         try{
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override

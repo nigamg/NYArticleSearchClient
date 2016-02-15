@@ -11,8 +11,10 @@ import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.gn.demo.nyarticlesearchclient.R;
 import com.gn.demo.nyarticlesearchclient.view.DatePickerFragment;
@@ -76,6 +78,7 @@ public class SearchFilterFragment extends DialogFragment {
         final View v = inflater.inflate(R.layout.fragment_search_filter, container, false);
 
         EditText beginDate = (EditText) v.findViewById(R.id.beginDate);
+        Button saveFilter = (Button) v.findViewById(R.id.filterBtn);
 
         beginDate.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vv) {
@@ -83,6 +86,13 @@ public class SearchFilterFragment extends DialogFragment {
                 newFragment.show(getChildFragmentManager(), "datePicker");
             }
         });
+
+        saveFilter.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View vv) {
+                Toast.makeText(getContext(), "Search Preference Saved!", Toast.LENGTH_SHORT);
+            }
+        });
+
         return v;
     }
 
