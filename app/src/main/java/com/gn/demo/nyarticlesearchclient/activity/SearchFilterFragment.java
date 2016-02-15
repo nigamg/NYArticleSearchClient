@@ -91,7 +91,9 @@ public class SearchFilterFragment extends DialogFragment {
         saveFilter.setOnClickListener(new View.OnClickListener() {
             public void onClick(View vv) {
                 Log.i("DEBUG", " saving");
-                Toast.makeText(getActivity(), "Search Preference Saved!", Toast.LENGTH_SHORT);
+                Toast.makeText(getActivity(), "Search Preference Saved!", Toast.LENGTH_SHORT).show();
+
+                getDialog().dismiss();
             }
         });
 
