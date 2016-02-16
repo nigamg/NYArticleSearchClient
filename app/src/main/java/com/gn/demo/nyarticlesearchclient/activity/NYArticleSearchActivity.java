@@ -117,6 +117,9 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
     public void fetchMoreData(int page, final int curSize){
 
         if(client != null && requestParams != null){
+            articles.clear();
+            adapter.notifyDataSetChanged();
+            
             requestParams.put("page", page);
 
             requestParams.put("q", cachedQuery);
@@ -146,9 +149,6 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
             }
             Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
             try{
-                articles.clear();
-                adapter.notifyDataSetChanged();
-
                 client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -227,6 +227,9 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                     cachedQuery = query;
 
                     if(query != null){
+                        articles.clear();
+                        adapter.notifyDataSetChanged();
+
                         articles = new ArrayList<>();
 
                         client = new AsyncHttpClient();
@@ -259,9 +262,6 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                         }
                         Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
                         try{
-                            articles.clear();
-                            adapter.notifyDataSetChanged();
-                            
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
