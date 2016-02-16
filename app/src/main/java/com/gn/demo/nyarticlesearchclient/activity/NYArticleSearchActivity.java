@@ -164,7 +164,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
                             gridRecyclerView.setAdapter(adapter);
 
-                            adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
+                            adapter.notifyItemRangeInserted(curSize, articles.size());
 
                         } catch (JSONException e) {
                             e.printStackTrace();
@@ -259,6 +259,8 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             requestParams.put("fq", fqValue.toString());
                         }
                         Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
+                        articles.clear();
+                        adapter.notifyDataSetChanged();
                         try{
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override
