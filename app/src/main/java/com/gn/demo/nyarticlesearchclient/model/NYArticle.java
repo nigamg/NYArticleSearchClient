@@ -1,5 +1,8 @@
 package com.gn.demo.nyarticlesearchclient.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -10,7 +13,7 @@ import java.util.ArrayList;
 /**
  * Created by workboard on 2/12/16.
  */
-public class NYArticle implements Serializable {
+public class NYArticle implements Parcelable {
 
     private String webUrl;
     private String headLine;
@@ -32,6 +35,24 @@ public class NYArticle implements Serializable {
             e.printStackTrace();
         }
     }
+
+    protected NYArticle(Parcel in) {
+        webUrl = in.readString();
+        headLine = in.readString();
+        thumbNail = in.readString();
+    }
+
+    public static final Creator<NYArticle> CREATOR = new Creator<NYArticle>() {
+        @Override
+        public NYArticle createFromParcel(Parcel in) {
+            return new NYArticle(in);
+        }
+
+        @Override
+        public NYArticle[] newArray(int size) {
+            return new NYArticle[size];
+        }
+    };
 
     public  static ArrayList<NYArticle> fromJSONArray(JSONArray array){
         ArrayList<NYArticle> results = new ArrayList<>();
@@ -67,5 +88,17 @@ public class NYArticle implements Serializable {
 
     public void setThumbNail(String thumbNail) {
         this.thumbNail = thumbNail;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(webUrl);
+        dest.writeString(headLine);
+        dest.writeString(thumbNail);
     }
 }
