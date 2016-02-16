@@ -9,10 +9,12 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 
 
 import com.gn.demo.nyarticlesearchclient.R;
@@ -59,14 +61,16 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         setContentView(R.layout.activity_nyarticle_search);
 
         gridRecyclerView = (RecyclerView) findViewById(R.id.gridItems);
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
-        gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         articles = new ArrayList<>();
+
+        gridRecyclerView.setVisibility(View.GONE);
 
         adapter = new GridAdapter(this, articles);
         gridRecyclerView.setAdapter(adapter);
 
+        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         gridRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
@@ -120,35 +124,20 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                 fqValue = new StringBuilder();
                 try{
                     if(sF.getAtleastOneValueIsSet()){
-                        if(sF.getBeginDate() != null){
-                            fqValue.append("begin_date:('");
-                            fqValue.append(sF.getBeginDate());
-                            fqValue.append("')");
+
+
+                        if(sF.getSortOrder() != null){
+                            requestParams.put("sort_order", sF.getSortOrder());
                         }
 
                         if(sF.getDeskValues() != null){
-                            if(fqValue.toString() != null && fqValue.length() != 0){
-                                fqValue.append(" AND news_desk:('");
-                                fqValue.append(sF.getDeskValues());
-                                fqValue.append("')");
-                            }else{
-                                fqValue.append("news_desk:('");
-                                fqValue.append(sF.getDeskValues());
-                                fqValue.append("')");
-                            }
+                            requestParams.put("fq", String.format("news_desk:(%s)", sF.getDeskValues()));
                         }
 
-                        if(sF.getSortOrder() != null){
-                            if(fqValue.toString() != null && fqValue.length() != 0){
-                                fqValue.append(" AND sort:('");
-                                fqValue.append(sF.getSortOrder());
-                                fqValue.append("')");
-                            }else{
-                                fqValue.append("sort:('");
-                                fqValue.append(sF.getSortOrder());
-                                fqValue.append("')");
-                            }
+                        if(sF.getBeginDate() != null){
+                            requestParams.put("begin_date", sF.getBeginDate());
                         }
+
                     }
                 }catch (Exception e){
                     e.printStackTrace();
@@ -167,10 +156,10 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             Log.d("DEBUG", articleJsonResults.toString());
                             articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
 
-                            gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+                            //gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
 
-                            adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
-                            gridRecyclerView.setAdapter(adapter);
+                            /*adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                            gridRecyclerView.setAdapter(adapter);*/
 
                             adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
 
@@ -248,34 +237,16 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             fqValue = new StringBuilder();
                             try{
                                 if(sF.getAtleastOneValueIsSet()){
-                                    if(sF.getBeginDate() != null){
-                                        fqValue.append("begin_date:('");
-                                        fqValue.append(sF.getBeginDate());
-                                        fqValue.append("')");
+                                    if(sF.getSortOrder() != null){
+                                        requestParams.put("sort_order", sF.getSortOrder());
                                     }
 
                                     if(sF.getDeskValues() != null){
-                                        if(fqValue.toString() != null && fqValue.length() != 0){
-                                            fqValue.append(" AND news_desk:('");
-                                            fqValue.append(sF.getDeskValues());
-                                            fqValue.append("')");
-                                        }else{
-                                            fqValue.append("news_desk:('");
-                                            fqValue.append(sF.getDeskValues());
-                                            fqValue.append("')");
-                                        }
+                                        requestParams.put("fq", String.format("news_desk:(%s)", sF.getDeskValues()));
                                     }
 
-                                    if(sF.getSortOrder() != null){
-                                        if(fqValue.toString() != null && fqValue.length() != 0){
-                                            fqValue.append(" AND sort:('");
-                                            fqValue.append(sF.getSortOrder());
-                                            fqValue.append("')");
-                                        }else{
-                                            fqValue.append("sort:('");
-                                            fqValue.append(sF.getSortOrder());
-                                            fqValue.append("')");
-                                        }
+                                    if(sF.getBeginDate() != null){
+                                        requestParams.put("begin_date", sF.getBeginDate());
                                     }
                                 }
                             }catch (Exception e){
@@ -295,10 +266,10 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                                         Log.d("DEBUG", articleJsonResults.toString());
                                         articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
 
-                                        gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+                                        //gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
 
-                                        adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
-                                        gridRecyclerView.setAdapter(adapter);
+                                        /*adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                                        gridRecyclerView.setAdapter(adapter);*/
 
                                         adapter.notifyDataSetChanged();
 
