@@ -146,6 +146,9 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
             }
             Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
             try{
+                articles.clear();
+                adapter.notifyDataSetChanged();
+
                 client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                     @Override
                     public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
@@ -256,6 +259,9 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                         }
                         Log.i("DEBUG" ,"Request param string value "+requestParams.toString());
                         try{
+                            articles.clear();
+                            adapter.notifyDataSetChanged();
+                            
                             client.get(apiRootUrl, requestParams, new JsonHttpResponseHandler(){
                                 @Override
                                 public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
