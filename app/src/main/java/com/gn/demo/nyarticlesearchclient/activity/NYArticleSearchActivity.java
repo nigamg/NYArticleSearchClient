@@ -42,6 +42,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
     RecyclerView gridRecyclerView;
     GridAdapter adapter;
     ArrayList<NYArticle> articles;
+    StaggeredGridLayoutManager staggeredGridLayoutManager;
 
     SearchFilter sF = new SearchFilter();
 
@@ -62,15 +63,14 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
 
         gridRecyclerView = (RecyclerView) findViewById(R.id.gridItems);
 
-        articles = new ArrayList<>();
+        staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-        gridRecyclerView.setVisibility(View.GONE);
+        articles = new ArrayList<>();
 
         adapter = new GridAdapter(this, articles);
         gridRecyclerView.setAdapter(adapter);
 
-        StaggeredGridLayoutManager staggeredGridLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
-        gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
         gridRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(staggeredGridLayoutManager) {
             @Override
@@ -119,7 +119,7 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
         if(client != null && requestParams != null){
             articles.clear();
             adapter.notifyDataSetChanged();
-            
+
             requestParams.put("page", page);
 
             requestParams.put("q", cachedQuery);
@@ -159,10 +159,10 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                             Log.d("DEBUG", articleJsonResults.toString());
                             articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
 
-                            //gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+                            gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-                            /*adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
-                            gridRecyclerView.setAdapter(adapter);*/
+                            adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                            gridRecyclerView.setAdapter(adapter);
 
                             adapter.notifyItemRangeInserted(curSize, articles.size() - 1);
 
@@ -227,8 +227,6 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                     cachedQuery = query;
 
                     if(query != null){
-                        articles.clear();
-                        adapter.notifyDataSetChanged();
 
                         articles = new ArrayList<>();
 
@@ -272,10 +270,10 @@ public class NYArticleSearchActivity extends AppCompatActivity implements Search
                                         Log.d("DEBUG", articleJsonResults.toString());
                                         articles.addAll(NYArticle.fromJSONArray(articleJsonResults));
 
-                                        //gridRecyclerView.setLayoutManager(new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL));
+                                        gridRecyclerView.setLayoutManager(staggeredGridLayoutManager);
 
-                                        /*adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
-                                        gridRecyclerView.setAdapter(adapter);*/
+                                        adapter = new GridAdapter(NYArticleSearchActivity.this, articles);
+                                        gridRecyclerView.setAdapter(adapter);
 
                                         adapter.notifyDataSetChanged();
 
